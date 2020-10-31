@@ -18,9 +18,16 @@ namespace ImagePacker.Client
         [STAThread()]
         public static void Main()
         {
+            var app = new App();
+            app.InitializeComponent();
+            app.Start();
+        }
+
+        void Start()
+        {
             var boot = Bootstrapper.GetDefaultContainer();
-            var app = boot.Resolve<IMainWindowFactory>().Build();
-            app.ShowDialog();
+            var window = boot.Resolve<IMainWindowFactory>().Build();
+            window.ShowDialog();
         }
     }
 }

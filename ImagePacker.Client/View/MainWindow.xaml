@@ -11,6 +11,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <UserControl Style="{StaticResource MenuView}"/>
 
     </Grid>
 </Window>
