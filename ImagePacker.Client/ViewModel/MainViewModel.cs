@@ -12,38 +12,53 @@ namespace ImagePacker.Client.ViewModel
 {
     public class MainViewModel : ViewModelBase, IMainViewModel
     {
+        private IFileDialogProvider _fileDialogProvider;
+        private PackProject _project;
+
         public IMenuViewModel MenuViewModel { get; }
 
-        public PackProject Project { get; set; }
+        public PackProject Project
+        {
+            get => _project;
+            set
+            {
+                _project = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public bool IsBusy { get; private set; }
 
-        public MainViewModel(IMenuViewModel menuViewModel)
+        public MainViewModel(IMenuViewModel menuViewModel, IFileDialogProvider fileDialogProvider)
         {
             MenuViewModel = menuViewModel;
-
+            _fileDialogProvider = fileDialogProvider;
             Initialize();
         }
 
         private void Initialize()
         {
             MenuViewModel.SetMainViewModel(this);
+        }
 
-            /*Project = new PackProject()
+        public void NewProject()
+        {
+            Project = new PackProject()
             {
-                Name = "Test",
-                Revision = "abc"
-            };*/
+                Name = "New project",
+                Revision = 0
+            };
         }
 
         public void Exit()
         {
-
+            Application.Current.Shutdown();
         }
 
         public void AddFiles()
         {
-            MessageBox.Show("ok");
+            if (Project == null) return;
+            _fileDialogProvider.ShowLoadMultipleDialog("Load image files", "image files (*.jpg)|*.jpg", (f) => f.ToList().ForEach(Project.AddFile));
         }
     }
 }

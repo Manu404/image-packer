@@ -11,5 +11,6 @@ namespace ImagePacker.Client.ViewModel
 
         void AddFiles();
         void Exit();
+        void NewProject();
     }
 }

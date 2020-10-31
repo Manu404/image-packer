@@ -5,6 +5,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using ImagePacker.Client.Common.Interface;
+using ImagePacker.Client.ViewModel;
 
 namespace ImagePacker.Client
 {
@@ -25,6 +26,7 @@ namespace ImagePacker.Client
             {
                 typeof(IFactory<>),
                 typeof(IFactory<,>),
+                typeof(IFileDialogProvider),
                 typeof(IViewModel)
             };
         }

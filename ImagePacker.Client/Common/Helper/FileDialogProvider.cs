@@ -6,6 +6,7 @@ namespace ImagePacker.Client.ViewModel
     public interface IFileDialogProvider
     {
         void ShowLoadDialog(string title, string filter, Action<string> save);
+        void ShowLoadMultipleDialog(string title, string filter, Action<string[]> load);
         void ShowSaveDialog(string title, string filter, Action<string> load);
     }
 
@@ -31,6 +32,18 @@ namespace ImagePacker.Client.ViewModel
                 if (openFileDialog1.FileName != string.Empty)
                 {
                     load(openFileDialog1.FileName);
+                }
+            }
+        }
+
+        public void ShowLoadMultipleDialog(string title, string filter, Action<string[]> load)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog { Filter = filter, Title = title, Multiselect = true };
+            if (openFileDialog1.ShowDialog() == true)
+            {
+                if (openFileDialog1.FileName != string.Empty ||  openFileDialog1.FileNames?.Length > 0)
+                {
+                    load(openFileDialog1.FileNames);
                 }
             }
         }

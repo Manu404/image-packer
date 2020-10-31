@@ -1,5 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,12 +15,12 @@ namespace ImagePacker.Client.ViewModel
         public ICommand ExitCommand { get; set; }
         public ICommand AddFilesCommand { get; set; }
 
-        private IMainViewModel _mainViewModel;
+        private IMainViewModel _mainViewModel { get; set; }
 
         public MenuViewModel()
         {
-            OpenCommand = new RelayCommand(() => OnOpen());
-            NewCommand = new RelayCommand(() => OnNew());
+            OpenCommand = new RelayCommand(() => OnOpen(), () => _mainViewModel?.IsBusy == false);
+            NewCommand = new RelayCommand(() => OnNew(), () => _mainViewModel?.IsBusy == false);
             ExitCommand = new RelayCommand(() => OnExit(), () => _mainViewModel?.IsBusy == false);
             SaveCommand = new RelayCommand(() => OnSave(), () => _mainViewModel?.Project != null);
             AddFilesCommand = new RelayCommand(() => AddFiles(), () => _mainViewModel?.Project != null);
@@ -48,7 +48,7 @@ namespace ImagePacker.Client.ViewModel
 
         private void OnNew()
         {
-
+            _mainViewModel?.NewProject();
         }
 
         private void OnOpen()
