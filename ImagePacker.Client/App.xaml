@@ -4,9 +4,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                
+
                 <ResourceDictionary Source="View/MenuView.xaml" />
-                
+                <ResourceDictionary Source="View/GalleryView.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>         
     </Application.Resources>

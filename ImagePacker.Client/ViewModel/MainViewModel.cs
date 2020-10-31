@@ -59,6 +59,8 @@ namespace ImagePacker.Client.ViewModel
         {
             if (Project == null) return;
             _fileDialogProvider.ShowLoadMultipleDialog("Load image files", "image files (*.jpg)|*.jpg", (f) => f.ToList().ForEach(Project.AddFile));
+            RaisePropertyChanged("Project");
+            Project.LoadImages();
         }
     }
 }

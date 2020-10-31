@@ -83,6 +83,7 @@
     </Compile>
     <Compile Include="Common\Bootstrapper.cs" />
     <Compile Include="Common\Helper\FileDialogProvider.cs" />
+    <Compile Include="Common\Helper\ImgConverter.cs" />
     <Compile Include="Common\Interface\IMainView.cs" />
     <Compile Include="Common\Interface\IFactory.cs" />
     <Compile Include="Model\PackProject.cs" />
@@ -126,6 +127,10 @@
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\GalleryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

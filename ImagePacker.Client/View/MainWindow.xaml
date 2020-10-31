@@ -9,10 +9,16 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="150" />
         </Grid.RowDefinitions>
 
         <UserControl Style="{StaticResource MenuView}" DataContext="{Binding MenuViewModel}"/>
+
+        <UserControl Style="{StaticResource ImageViewer}" Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=Gallery}"></UserControl>
+
+        <UserControl Grid.Row="2" DataContext="{Binding Project}">
+            <ListView  Style="{StaticResource ImageListView}" ItemsSource="{Binding Files}" x:Name="Gallery" />
+        </UserControl>
 
     </Grid>
 </Window>
