@@ -1,4 +1,5 @@
-﻿using ImagePacker.Client.View.Factory;
+﻿using ImagePacker.Client.Model;
+using ImagePacker.Client.View.Factory;
 using ImagePacker.Client.ViewModel;
 using System;
 using System.Configuration;

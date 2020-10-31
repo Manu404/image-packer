@@ -8,5 +8,7 @@ namespace ImagePacker.Client.ViewModel
         ICommand NewCommand { get; }
         ICommand OpenCommand { get; }
         ICommand SaveCommand { get; }
+
+        void SetMainViewModel(IMainViewModel viewModel);
     }
 }

@@ -5,15 +5,23 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Menu>
-                        <MenuItem Header="_File">
-                            <MenuItem Header="_New" />
-                            <MenuItem Header="_Open" />
-                            <MenuItem Header="_Save" />
-                            <Separator />
-                            <MenuItem Header="_Exit" />
-                        </MenuItem>
-                    </Menu>
+                    <Grid>
+
+                        
+                        <Menu>
+                            <MenuItem Header="_File">
+                                <MenuItem Header="_New" Command="{Binding NewCommand}" />
+                                <MenuItem Header="_Open" Command="{Binding OpenCommand}" />
+                                <MenuItem Header="_Save" Command="{Binding SaveComment}" />
+                                <Separator />
+                                <MenuItem Header="_Exit"  Command="{Binding ExitCommand}" />
+                            </MenuItem>
+                            <MenuItem Header="_Project">
+                                <MenuItem Header="_Add Files" Command="{Binding AddFilesCommand}" />
+                            </MenuItem>
+                        </Menu>
+
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

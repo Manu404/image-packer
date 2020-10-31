@@ -9,9 +9,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <UserControl Style="{StaticResource MenuView}"/>
+        <UserControl Style="{StaticResource MenuView}" DataContext="{Binding MenuViewModel}"/>
 
     </Grid>
 </Window>

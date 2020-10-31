@@ -9,15 +9,36 @@ namespace ImagePacker.Client.ViewModel
 {
     public class MenuViewModel : ViewModelBase, IMenuViewModel
     {
-        public ICommand OpenCommand { get; }
-        public ICommand NewCommand { get; }
-        public ICommand SaveCommand { get; }
+        public ICommand OpenCommand { get; set; }
+        public ICommand NewCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
+        public ICommand ExitCommand { get; set; }
+        public ICommand AddFilesCommand { get; set; }
+
+        private IMainViewModel _mainViewModel;
 
         public MenuViewModel()
         {
-            OpenCommand = new RelayCommand(new Action(OnOpen), true);
-            NewCommand = new RelayCommand(new Action(OnNew), true);
-            SaveCommand = new RelayCommand(new Action(OnSave), true);
+            OpenCommand = new RelayCommand(() => OnOpen());
+            NewCommand = new RelayCommand(() => OnNew());
+            ExitCommand = new RelayCommand(() => OnExit(), () => _mainViewModel?.IsBusy == false);
+            SaveCommand = new RelayCommand(() => OnSave(), () => _mainViewModel?.Project != null);
+            AddFilesCommand = new RelayCommand(() => AddFiles(), () => _mainViewModel?.Project != null);
+        }
+
+        public void SetMainViewModel(IMainViewModel viewModel)
+        {
+            _mainViewModel = viewModel;
+        }
+
+        private void OnExit()
+        {
+            _mainViewModel?.Exit();
+        }
+
+        private void AddFiles()
+        {
+            _mainViewModel?.AddFiles();
         }
 
         private void OnSave()

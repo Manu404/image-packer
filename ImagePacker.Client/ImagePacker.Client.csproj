@@ -83,8 +83,9 @@
     </Compile>
     <Compile Include="Common\Bootstrapper.cs" />
     <Compile Include="Common\Helper\FileDialogProvider.cs" />
-    <Compile Include="View\IMainView.cs" />
+    <Compile Include="Common\Interface\IMainView.cs" />
     <Compile Include="Common\Interface\IFactory.cs" />
+    <Compile Include="Model\PackProject.cs" />
     <Compile Include="View\Factory\IMainWindowFactory.cs" />
     <Compile Include="View\Factory\MainWindowFactory.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
@@ -136,7 +137,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="ViewModel\Factory\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
