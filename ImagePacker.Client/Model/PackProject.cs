@@ -29,7 +29,7 @@ namespace ImagePacker.Client.Model
             IncrementRevision = new RelayCommand(() => Revision += 1);
         }
 
-        private void AddFile(string file)
+        public void AddFile(string file)
         {
             Files.Add(new PackProjectFile()
             {

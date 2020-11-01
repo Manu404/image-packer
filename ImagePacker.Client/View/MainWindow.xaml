@@ -49,15 +49,17 @@
                         <ColumnDefinition Width="10"/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock>Project name</TextBlock>
-                    <TextBox Grid.Column="2" Text="{Binding Project.Name, Mode=TwoWay}" />
+                    <TextBox Grid.Column="2" Text="{Binding Project.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     
                     <TextBlock Grid.Column="4">Revision</TextBlock>
                     <TextBlock Grid.Column="6" Text="{Binding Project.Revision}"/>
 
                     <Button Grid.Column="7" Command="{Binding Project.IncrementRevision}" Content="Update" />
+                    <Button Grid.Column="8" Command="{Binding Pack}" Content="Pack" />
                 </Grid>
                 
                 <UserControl Style="{StaticResource ImageViewer}" Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=Gallery}" />
@@ -82,7 +84,11 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock>New keyword</TextBlock>
-                            <TextBox Grid.Column="2" Text="{Binding SelectedItem.KeywordInput, ElementName=Gallery, Mode=TwoWay}" />
+                            <TextBox Grid.Column="2" Text="{Binding SelectedItem.KeywordInput, ElementName=Gallery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}" Key="Enter" />
+                                </TextBox.InputBindings>
+                            </TextBox>
                             <Button Grid.Column="3" Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}">Add</Button>
                         </Grid>
 
