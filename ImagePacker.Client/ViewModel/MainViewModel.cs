@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Castle.Windsor.Diagnostics;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using ImagePacker.Client.Model;
@@ -39,7 +40,11 @@ namespace ImagePacker.Client.ViewModel
 
         public bool IsProjectLoaded { get; set; }
 
-        public bool IsBusy { get; private set; }
+        public bool IsBusy { get; set; }
+
+        public bool IsLoading { get; set; }
+
+        public bool IsFileSelected { get; set; }
 
         public PackProjectFile SelectedFile
         { 
@@ -51,6 +56,7 @@ namespace ImagePacker.Client.ViewModel
                 {
                     await LoadFullResImage();
                 }).Start();
+                this.IsFileSelected = value != null;
             }
         }
 
@@ -118,8 +124,16 @@ namespace ImagePacker.Client.ViewModel
 
         public async Task LoadFullResImage()
         {
+            if(this.SelectedFile == null)
+            {
+                this.FullResolutionImage = null;
+                return;
+            }
+
             await Task.Run(() =>
             {
+                this.IsLoading = true;
+                this.FullResolutionImage = null;
                 using (var fileStream = new FileStream(this.SelectedFile.ImageUrl, FileMode.Open, FileAccess.Read))
                 {
                     BitmapImage bi = new BitmapImage();
@@ -141,7 +155,9 @@ namespace ImagePacker.Client.ViewModel
                 // CLR will use mem if available, the full res images are huge and will quickly addup
                 // we force it to collect unused media in memory. There's no memleak, but it's not because resource
                 // are present and GC "don't care" that we should use them without consideration
-                GC.Collect(); 
+                GC.Collect();
+
+                this.IsLoading = false;
             });
         }
     }

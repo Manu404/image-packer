@@ -10,9 +10,12 @@ namespace ImagePacker.Client.Model
         {
             try
             {
-                XmlSerializer ser = new XmlSerializer(typeof(PackProject));
-                ser.Serialize(new FileStream(file, FileMode.Create, FileAccess.ReadWrite), project);
-                project.FileName = file;
+                using (var stream = new FileStream(file, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    XmlSerializer ser = new XmlSerializer(typeof(PackProject));
+                    ser.Serialize(stream, project);
+                    project.FileName = file;
+                }
             }
             catch (Exception e)
             {
@@ -24,9 +27,13 @@ namespace ImagePacker.Client.Model
         {
             try
             {
-                XmlSerializer ser = new XmlSerializer(typeof(PackProject));
-                var project = (PackProject)ser.Deserialize(new FileStream(file, FileMode.Open, FileAccess.Read));
-                if(project != null) project.FileName = file;
+                PackProject project;
+                using (var stream = new FileStream(file, FileMode.Open, FileAccess.Read))
+                {
+                    XmlSerializer ser = new XmlSerializer(typeof(PackProject));
+                    project = (PackProject)ser.Deserialize(stream);
+                    if (project != null) project.FileName = file;
+                }
                 return project;
             }
             catch (Exception e)

@@ -3,6 +3,7 @@ using System;
 
 namespace ImagePacker.Client.ViewModel
 {
+
     public interface IFileDialogProvider
     {
         void ShowLoadDialog(string title, string filter, Action<string> save);
