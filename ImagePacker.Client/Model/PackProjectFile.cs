@@ -1,10 +1,12 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ImagePacker.Client.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -14,21 +16,11 @@ namespace ImagePacker.Client.Model
 {
     public class PackProjectFile : ViewModelBase
     {
-        private ImageSource _image;
-        private string _keywordInput;
-
         public string ImageUrl { get; set; }
         public ObservableCollection<string> Keywords { get; set; }
 
-        public string KeywordInput
-        {
-            get => _keywordInput; 
-            set 
-            { 
-                _keywordInput = value;
-                RaisePropertyChanged();
-            }
-        }
+        [XmlIgnore]
+        public string KeywordInput { get; set; }
 
         [XmlIgnore]
         public ICommand AddKeyword { get; set; }
@@ -37,15 +29,7 @@ namespace ImagePacker.Client.Model
         public ICommand DeleteKeyword { get; set; }
 
         [XmlIgnore]
-        public ImageSource Image
-        {
-            get { return _image; }
-            set
-            {
-                _image = value;
-                RaisePropertyChanged();
-            }
-        }
+        public ImageSource PreviewImage { get; set; }
 
         public PackProjectFile()
         {
@@ -69,12 +53,26 @@ namespace ImagePacker.Client.Model
 
         public async Task Load()
         {
-            if (Image != null) return;
-            Image = await Task.Run(() =>
+            if (PreviewImage != null) return;
+            await Task.Run(() =>
             {
                 using (var fileStream = new FileStream(ImageUrl, FileMode.Open, FileAccess.Read))
                 {
-                    return BitmapFrame.Create(fileStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+                    BitmapImage bi = new BitmapImage();
+                    try
+                    {
+                        bi.BeginInit();
+                        bi.CacheOption = BitmapCacheOption.OnLoad;
+                        bi.StreamSource = fileStream;
+                        bi.DecodePixelWidth = 400;
+                        bi.EndInit();
+                        bi.Freeze();
+                        this.PreviewImage = bi;
+                    }
+                    finally
+                    {
+                        bi = null;
+                    }                    
                 }
             });
         }
