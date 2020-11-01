@@ -48,7 +48,7 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="10"/>
                         <ColumnDefinition/>
-                        
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock>Project name</TextBlock>
@@ -56,6 +56,8 @@
                     
                     <TextBlock Grid.Column="4">Revision</TextBlock>
                     <TextBlock Grid.Column="6" Text="{Binding Project.Revision}"/>
+
+                    <Button Grid.Column="7" Command="{Binding IncrementRevision}" Content="Update" />
                 </Grid>
                 
                 <UserControl Style="{StaticResource ImageViewer}" Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=Gallery}" />
@@ -64,7 +66,7 @@
                     <ListView  Style="{StaticResource ImageListView}" ItemsSource="{Binding Project.Files}" x:Name="Gallery" />
                 </UserControl>
 
-                <UserControl Grid.Column="1" Grid.Row="1">
+                <UserControl Grid.Column="1" Grid.Row="1" Visibility="{Binding IsProjectLoaded, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
@@ -80,7 +82,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock>New keyword</TextBlock>
-                            <TextBox Grid.Column="2" Text="{Binding CurrentKeyword, Mode=TwoWay}" />
+                            <TextBox Grid.Column="2" Text="{Binding SelectedItem.KeywordInput, ElementName=Gallery, Mode=TwoWay}" />
                             <Button Grid.Column="3" Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}">Add</Button>
                         </Grid>
 
@@ -91,11 +93,9 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Text="{Binding}"/>
-                                        <Button Grid.Column="1">Edit</Button>
-                                        <Button Grid.Column="2">Delete</Button>
+                                        <Button Grid.Column="1" Command="{Binding SelectedItem.DeleteKeyword, ElementName=Gallery}" CommandParameter="{Binding}" >Delete</Button>
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

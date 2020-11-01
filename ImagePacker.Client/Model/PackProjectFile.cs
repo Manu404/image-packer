@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -13,19 +14,28 @@ namespace ImagePacker.Client.Model
 {
     public class PackProjectFile : ViewModelBase
     {
-        [XmlIgnore]
-        public ICommand AddKeyword { get; set; }
-
-        public PackProjectFile()
-        {
-            Keywords = new ObservableCollection<string>();
-            AddKeyword = new RelayCommand(() => OnAddKeyword());
-        }
-
         public string ImageUrl { get; set; }
         public ObservableCollection<string> Keywords { get; set; }
 
+        public string KeywordInput
+        {
+            get => keywordInput; 
+            set 
+            { 
+                keywordInput = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        [XmlIgnore]
+        public ICommand AddKeyword { get; set; }
+
+        [XmlIgnore]
+        public ICommand DeleteKeyword { get; set; }
+
         private ImageSource image;
+        private string keywordInput;
+
         [XmlIgnore]
         public ImageSource Image
         {
@@ -37,9 +47,24 @@ namespace ImagePacker.Client.Model
             }
         }
 
+        public PackProjectFile()
+        {
+            Keywords = new ObservableCollection<string>();
+            AddKeyword = new RelayCommand(() => OnAddKeyword());
+            DeleteKeyword = new RelayCommand<string>((k) => OnDeleteKeyword(k));
+        }
+
         public void OnAddKeyword()
         {
-            this.Keywords.Add("test");
+            if (!this.Keywords.Contains(KeywordInput))
+                this.Keywords.Add(KeywordInput);
+            KeywordInput = String.Empty;
+        }
+
+        public void OnDeleteKeyword(string keyword)
+        {
+            if (!this.Keywords.Contains(keyword)) return;
+            this.Keywords.Remove(keyword);
         }
 
         public async Task Load()
