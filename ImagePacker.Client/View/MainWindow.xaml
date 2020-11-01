@@ -2,23 +2,63 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <command:EventToCommand Command="{Binding WindowClosingCommand}" PassEventArgsToCommand="True" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="150" />
         </Grid.RowDefinitions>
 
         <UserControl Style="{StaticResource MenuView}" DataContext="{Binding MenuViewModel}"/>
 
-        <UserControl Style="{StaticResource ImageViewer}" Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=Gallery}"></UserControl>
+        <UserControl Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-        <UserControl Grid.Row="2" DataContext="{Binding Project}">
-            <ListView  Style="{StaticResource ImageListView}" ItemsSource="{Binding Files}" x:Name="Gallery" />
+                <Grid Visibility="{Binding IsProjectLoaded, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="10"/>
+                        
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition/>
+                        
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock>Project name</TextBlock>
+                    <TextBox Grid.Column="2" Text="{Binding Project.Name, Mode=TwoWay}" />
+                    
+                    <TextBlock Grid.Column="4">Revision</TextBlock>
+                    <TextBlock Grid.Column="6" Text="{Binding Project.Revision}"/>
+                </Grid>
+                
+                <UserControl Style="{StaticResource ImageViewer}" Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=Gallery}" />
+
+                <UserControl Grid.Row="2">
+                    <ListView  Style="{StaticResource ImageListView}" ItemsSource="{Binding Project.Files}" x:Name="Gallery" />
+                </UserControl>
+            </Grid>
         </UserControl>
-
     </Grid>
 </Window>

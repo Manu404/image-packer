@@ -8,9 +8,12 @@ namespace ImagePacker.Client.ViewModel
         IMenuViewModel MenuViewModel { get; }
         PackProject Project { get; set; }
         bool IsBusy { get; }
+        bool IsProjectLoaded { get; set; }
 
         void AddFiles();
         void Exit();
+        void LoadProject();
         void NewProject();
+        void SaveProject();
     }
 }

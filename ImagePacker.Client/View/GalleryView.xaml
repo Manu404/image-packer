@@ -19,7 +19,17 @@
             <Setter.Value>
                 <DataTemplate>
                     <UserControl>
-                        <Image Source="{Binding Image}" Width="100" Height="100"></Image>
+                        <Grid Height="150">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <Button>before</Button>
+                                <Button>after</Button>
+                            </StackPanel>
+                            <Image Grid.Row="1" Source="{Binding Image}" Stretch="Uniform" StretchDirection="DownOnly" />
+                        </Grid>
                     </UserControl>
                 </DataTemplate>
             </Setter.Value>

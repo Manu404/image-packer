@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using ImagePacker.Client.Model;
 using System;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace ImagePacker.Client.ViewModel
 {
@@ -14,8 +16,11 @@ namespace ImagePacker.Client.ViewModel
     {
         private IFileDialogProvider _fileDialogProvider;
         private PackProject _project;
+        private bool projectLoaded;
 
         public IMenuViewModel MenuViewModel { get; }
+
+        public ICommand WindowClosingCommand { get; set; }
 
         public PackProject Project
         {
@@ -23,6 +28,17 @@ namespace ImagePacker.Client.ViewModel
             set
             {
                 _project = value;
+                RaisePropertyChanged();
+                IsProjectLoaded = value != null;
+            }
+        }
+
+        public bool IsProjectLoaded 
+        { 
+            get => projectLoaded;                
+            set 
+            { 
+                projectLoaded = value;
                 RaisePropertyChanged();
             }
         }
@@ -39,6 +55,16 @@ namespace ImagePacker.Client.ViewModel
         private void Initialize()
         {
             MenuViewModel.SetMainViewModel(this);
+            IsProjectLoaded = false;
+            IsBusy = false;
+
+            WindowClosingCommand = new RelayCommand(() => SaveOnExit());
+        }
+
+        private void SaveOnExit()
+        {
+            if (Project != null && !String.IsNullOrEmpty(Project.FileName)) ProjectSerializer.Save(Project.FileName, Project);
+            else if (Project != null) SaveProject();
         }
 
         public void NewProject()
@@ -48,6 +74,19 @@ namespace ImagePacker.Client.ViewModel
                 Name = "New project",
                 Revision = 0
             };
+        }
+
+        public void SaveProject()
+        {
+            if (Project == null) return;
+            _fileDialogProvider.ShowSaveDialog("Save Project", "project files (*.proj)|*.proj", (f) => ProjectSerializer.Save(f, Project));
+        }
+
+        public void LoadProject()
+        {
+            if (Project != null) SaveProject();
+            _fileDialogProvider.ShowLoadDialog("Load Project", "project files (*.proj)|*.proj", (f) => Project = ProjectSerializer.Load(f));
+            Project.LoadImages();
         }
 
         public void Exit()

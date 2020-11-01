@@ -87,6 +87,8 @@
     <Compile Include="Common\Interface\IMainView.cs" />
     <Compile Include="Common\Interface\IFactory.cs" />
     <Compile Include="Model\PackProject.cs" />
+    <Compile Include="Common\Helper\ProjectSerializer.cs" />
+    <Compile Include="Model\PackProjectFile.cs" />
     <Compile Include="View\Factory\IMainWindowFactory.cs" />
     <Compile Include="View\Factory\MainWindowFactory.cs" />
     <Compile Include="View\MainWindow.xaml.cs">

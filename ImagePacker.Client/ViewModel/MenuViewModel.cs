@@ -22,8 +22,8 @@ namespace ImagePacker.Client.ViewModel
             OpenCommand = new RelayCommand(() => OnOpen(), () => _mainViewModel?.IsBusy == false);
             NewCommand = new RelayCommand(() => OnNew(), () => _mainViewModel?.IsBusy == false);
             ExitCommand = new RelayCommand(() => OnExit(), () => _mainViewModel?.IsBusy == false);
-            SaveCommand = new RelayCommand(() => OnSave(), () => _mainViewModel?.Project != null);
-            AddFilesCommand = new RelayCommand(() => AddFiles(), () => _mainViewModel?.Project != null);
+            SaveCommand = new RelayCommand(() => OnSave(), () => _mainViewModel?.IsProjectLoaded == true);
+            AddFilesCommand = new RelayCommand(() => AddFiles(), () => _mainViewModel?.IsProjectLoaded == true);
         }
 
         public void SetMainViewModel(IMainViewModel viewModel)
@@ -43,7 +43,7 @@ namespace ImagePacker.Client.ViewModel
 
         private void OnSave()
         {
-
+            _mainViewModel?.SaveProject();
         }
 
         private void OnNew()
@@ -53,7 +53,7 @@ namespace ImagePacker.Client.ViewModel
 
         private void OnOpen()
         {
-
+            _mainViewModel?.LoadProject();
         }
     }
 }
