@@ -14,6 +14,6 @@ namespace ImagePacker.Client.ViewModel
         void Exit();
         void LoadProject();
         void NewProject();
-        void SaveProject();
+        void SaveProject(bool saveAs = false);
     }
 }

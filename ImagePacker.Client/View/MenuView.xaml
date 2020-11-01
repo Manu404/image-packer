@@ -40,11 +40,13 @@
                                 <MenuItem Header="_New" Command="{Binding NewCommand}" />
                                 <MenuItem Header="_Open" Command="{Binding OpenCommand}" />
                                 <MenuItem Header="_Save" Command="{Binding SaveCommand}" />
+                                <MenuItem Header="_Save As" Command="{Binding SaveAsCommand}" />
                                 <Separator />
                                 <MenuItem Header="_Exit"  Command="{Binding ExitCommand}" />
                             </MenuItem>
                             <MenuItem Header="_Project">
                                 <MenuItem Header="_Add Files" Command="{Binding AddFilesCommand}" />
+                                <MenuItem Header="_Pack" Command="{Binding PackCommand}" />
                             </MenuItem>
                         </Menu>
 
@@ -54,9 +56,11 @@
                                 <Button Command="{Binding NewCommand}" Content="New"  />
                                 <Button Command="{Binding OpenCommand}" Content="Open" />
                                 <Button Command="{Binding SaveCommand}" Content="Save" />
+                                <Button Command="{Binding SaveAsCommand}" Content="Save As" />
                             </ToolBar>
                             <ToolBar>
                                 <Button Command="{Binding AddFilesCommand}" Content="Add files" />
+                                <Button Command="{Binding PackCommand}" Content="Pack" />
                             </ToolBar>
                         </ToolBarTray>    
 

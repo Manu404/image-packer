@@ -21,7 +21,13 @@
 
         <UserControl Style="{StaticResource MenuView}" DataContext="{Binding MenuViewModel}"/>
 
-        <UserControl Grid.Row="1" Margin="5">
+        <TextBlock 
+            Grid.Row="1" Margin="5"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Visibility="{Binding IsProjectLoaded, Converter={StaticResource InverseBooleanToVisibilityConverter}}">Load or create a project to start</TextBlock>
+
+        <UserControl Grid.Row="1" Margin="5" Visibility="{Binding IsProjectLoaded, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -31,91 +37,96 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="auto" />
                 </Grid.ColumnDefinitions>
 
-                <Grid Visibility="{Binding IsProjectLoaded, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="10"/>
-                        
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+                <Border BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
 
-                    <TextBlock>Project name</TextBlock>
-                    <TextBox Grid.Column="2" Text="{Binding Project.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    
-                    <TextBlock Grid.Column="4">Revision</TextBlock>
-                    <TextBlock Grid.Column="6" Text="{Binding Project.Revision}"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="10"/>
 
-                    <Button Grid.Column="7" Command="{Binding Project.IncrementRevision}" Content="Update" />
-                    <Button Grid.Column="8" Command="{Binding Pack}" Content="Pack" />
-                </Grid>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock VerticalAlignment="Center">Project name</TextBlock>
+                        <TextBox  VerticalAlignment="Center" Grid.Column="2" Text="{Binding Project.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <TextBlock VerticalAlignment="Center" Grid.Column="4">Revision</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Grid.Column="6" Text="{Binding Project.Revision}"/>
+
+                        <Button VerticalAlignment="Center" Grid.Column="7" Command="{Binding Project.IncrementRevision}" Content="Update" />
+                    </Grid>
+
+                </Border>
+
+                <Border Grid.Column="2" Grid.RowSpan="2" 
+                        BorderThickness="1" BorderBrush="LightGray"
+                        Visibility="{Binding IsProjectLoaded, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                        IsEnabled="{Binding IsFileSelected}">
+                    <UserControl >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock VerticalAlignment="Center">New keyword</TextBlock>
+                                <TextBox VerticalAlignment="Center" Grid.Column="2" Text="{Binding SelectedItem.KeywordInput, ElementName=Gallery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}" Key="Enter" />
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                                <Button VerticalAlignment="Center" Grid.Column="3" Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}">Add</Button>
+                            </Grid>
+
+                            <ListView ItemsSource="{Binding SelectedItem.Keywords, ElementName=Gallery}" Grid.Row="1" HorizontalContentAlignment="Stretch">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding}"/>
+                                            <Button Grid.Column="1" Command="{Binding SelectedItem.DeleteKeyword, ElementName=Gallery}" CommandParameter="{Binding}" >Delete</Button>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </UserControl>
+                </Border>
 
                 <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1">
                     <TextBlock Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">Loading...</TextBlock>
                     <UserControl Style="{StaticResource ImageViewer}" Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                 </Grid>
 
-
                 <UserControl Grid.Row="2">
-                        <ListView  Style="{StaticResource ImageListView}" 
+                    <ListView  Style="{StaticResource ImageListView}" 
                                ItemsSource="{Binding Project.Files}" 
                                x:Name="Gallery" 
                                SelectedItem="{Binding SelectedFile, Mode=TwoWay}" />
-                </UserControl>
-
-                <UserControl Grid.Column="1" Grid.Row="1" 
-                             Visibility="{Binding IsProjectLoaded, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                             IsEnabled="{Binding IsFileSelected}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <TextBlock>New keyword</TextBlock>
-                            <TextBox Grid.Column="2" Text="{Binding SelectedItem.KeywordInput, ElementName=Gallery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                <TextBox.InputBindings>
-                                    <KeyBinding Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}" Key="Enter" />
-                                </TextBox.InputBindings>
-                            </TextBox>
-                            <Button Grid.Column="3" Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}">Add</Button>
-                        </Grid>
-
-                        <ListView ItemsSource="{Binding SelectedItem.Keywords, ElementName=Gallery}" Grid.Row="1" HorizontalContentAlignment="Stretch">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding}"/>
-                                        <Button Grid.Column="1" Command="{Binding SelectedItem.DeleteKeyword, ElementName=Gallery}" CommandParameter="{Binding}" >Delete</Button>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
                 </UserControl>
             </Grid>
         </UserControl>

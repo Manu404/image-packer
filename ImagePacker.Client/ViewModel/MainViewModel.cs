@@ -20,7 +20,6 @@ namespace ImagePacker.Client.ViewModel
     {
         private IFileDialogProvider _fileDialogProvider;
         private PackProject _project;
-        private bool projectLoaded;
         private PackProjectFile _selectedFile;
 
         public IMenuViewModel MenuViewModel { get; }
@@ -33,8 +32,21 @@ namespace ImagePacker.Client.ViewModel
             set
             {
                 _project = value;
-                RaisePropertyChanged();
                 IsProjectLoaded = value != null;
+            }
+        }
+
+        public PackProjectFile SelectedFile
+        {
+            get => _selectedFile;
+            set
+            {
+                _selectedFile = value;
+                new Task(async () =>
+                {
+                    await LoadFullResImage();
+                }).Start();
+                this.IsFileSelected = value != null;
             }
         }
 
@@ -45,20 +57,6 @@ namespace ImagePacker.Client.ViewModel
         public bool IsLoading { get; set; }
 
         public bool IsFileSelected { get; set; }
-
-        public PackProjectFile SelectedFile
-        { 
-            get => _selectedFile;
-            set 
-            { 
-                _selectedFile = value;
-                new Task(async () =>
-                {
-                    await LoadFullResImage();
-                }).Start();
-                this.IsFileSelected = value != null;
-            }
-        }
 
         public ImageSource FullResolutionImage { get; set; }
 
@@ -93,10 +91,10 @@ namespace ImagePacker.Client.ViewModel
             };
         }
 
-        public void SaveProject()
+        public void SaveProject(bool saveAs  = false)
         {
             if (Project == null) return;
-            if (String.IsNullOrEmpty(Project.FileName))
+            if (String.IsNullOrEmpty(Project.FileName) ||  saveAs)
                 _fileDialogProvider.ShowSaveDialog("Save Project", "project files (*.proj)|*.proj", (f) => ProjectSerializer.Save(f, Project));
             else
                 ProjectSerializer.Save(Project.FileName, Project);
@@ -124,16 +122,12 @@ namespace ImagePacker.Client.ViewModel
 
         public async Task LoadFullResImage()
         {
-            if(this.SelectedFile == null)
-            {
-                this.FullResolutionImage = null;
-                return;
-            }
+            this.FullResolutionImage = null;
+            if (this.SelectedFile == null) return;
 
             await Task.Run(() =>
             {
                 this.IsLoading = true;
-                this.FullResolutionImage = null;
                 using (var fileStream = new FileStream(this.SelectedFile.ImageUrl, FileMode.Open, FileAccess.Read))
                 {
                     BitmapImage bi = new BitmapImage();
