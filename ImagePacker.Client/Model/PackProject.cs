@@ -10,18 +10,17 @@ namespace ImagePacker.Client.Model
 {
     public class PackProject : ViewModelBase
     {
-        private int revision;
-        private string name;
+        private int _revision;
+        private string _name;
 
         [XmlIgnore]
         public ICommand IncrementRevision { get; set; }
-
-        public string Name { get => name; set { name = value;  RaisePropertyChanged(); } }
-        public int Revision { get => revision; set { revision = value; RaisePropertyChanged(); } }
-        public ObservableCollection<PackProjectFile> Files { get; set; }
-
         [XmlIgnore]
         public string FileName { get; set; }
+
+        public string Name { get => _name; set { _name = value;  RaisePropertyChanged(); } }
+        public int Revision { get => _revision; set { _revision = value; RaisePropertyChanged(); } }
+        public ObservableCollection<PackProjectFile> Files { get; set; }
 
         public PackProject()
         {
@@ -30,7 +29,7 @@ namespace ImagePacker.Client.Model
             IncrementRevision = new RelayCommand(() => Revision += 1);
         }
 
-        public void AddFile(string file)
+        private void AddFile(string file)
         {
             Files.Add(new PackProjectFile()
             {

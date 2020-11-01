@@ -79,7 +79,10 @@ namespace ImagePacker.Client.ViewModel
         public void SaveProject()
         {
             if (Project == null) return;
-            _fileDialogProvider.ShowSaveDialog("Save Project", "project files (*.proj)|*.proj", (f) => ProjectSerializer.Save(f, Project));
+            if (String.IsNullOrEmpty(Project.FileName))
+                _fileDialogProvider.ShowSaveDialog("Save Project", "project files (*.proj)|*.proj", (f) => ProjectSerializer.Save(f, Project));
+            else
+                ProjectSerializer.Save(Project.FileName, Project);
         }
 
         public void LoadProject()
