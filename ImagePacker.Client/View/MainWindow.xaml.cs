@@ -1,4 +1,6 @@
 ﻿using ImagePacker.Client.ViewModel;
+using MahApps.Metro.Controls;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace ImagePacker.Client
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IMainView
+    public partial class MainWindow : MetroWindow, IMainView
     {
         public MainWindow()
         {
@@ -31,5 +33,9 @@ namespace ImagePacker.Client
             this.DataContext = viewmodel;
         }
 
+        public bool? ShowDialog()
+        {
+            return base.ShowDialog();
+        }
     }
 }
