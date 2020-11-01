@@ -4,7 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
-        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         Title="ImagePacker" Height="450" Width="800">
     <i:Interaction.Triggers>
@@ -38,10 +46,10 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="5" />
-                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="200" />
                 </Grid.ColumnDefinitions>
 
-                <Border BorderThickness="1">
+                <Border>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -66,13 +74,18 @@
                         <TextBlock VerticalAlignment="Center" Grid.Column="4">Revision</TextBlock>
                         <TextBlock VerticalAlignment="Center" Grid.Column="6" Text="{Binding Project.Revision}"/>
 
-                        <Button VerticalAlignment="Center" Grid.Column="7" Command="{Binding Project.IncrementRevision}" Content="Update" />
+                        <Button VerticalAlignment="Center" Grid.Column="7" Command="{Binding Project.IncrementRevision}" Style="{StaticResource MaterialDesignFlatButton}">
+                            <materialDesign:PackIcon
+                                            Kind="Update"
+                                            Height="24"
+                                            Width="24" />
+                        </Button>
                     </Grid>
 
                 </Border>
 
                 <Border Grid.Column="2" Grid.RowSpan="2" 
-                        BorderThickness="1" BorderBrush="LightGray"
+                        BorderThickness="0" 
                         Visibility="{Binding IsProjectLoaded, Converter={StaticResource BooleanToVisibilityConverter}}" 
                         IsEnabled="{Binding IsFileSelected}">
                     <UserControl >
@@ -82,37 +95,59 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="10"/>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
+                            <Border>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <TextBlock VerticalAlignment="Center">New keyword</TextBlock>
-                                <TextBox VerticalAlignment="Center" Grid.Column="2" Text="{Binding SelectedItem.KeywordInput, ElementName=Gallery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBox.InputBindings>
+                                    <TextBox Grid.Column="0" 
+                                        materialDesign:HintAssist.Hint="New keyword"                            
+                                        Text="{Binding SelectedItem.KeywordInput, ElementName=Gallery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        <TextBox.InputBindings>
                                         <KeyBinding Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}" Key="Enter" />
-                                    </TextBox.InputBindings>
-                                </TextBox>
-                                <Button VerticalAlignment="Center" Grid.Column="3" Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}">Add</Button>
-                            </Grid>
+                                        </TextBox.InputBindings>
+                                    </TextBox>
 
-                            <ListView ItemsSource="{Binding SelectedItem.Keywords, ElementName=Gallery}" Grid.Row="1" HorizontalContentAlignment="Stretch">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding}"/>
-                                            <Button Grid.Column="1" Command="{Binding SelectedItem.DeleteKeyword, ElementName=Gallery}" CommandParameter="{Binding}" >Delete</Button>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                                    <Button Grid.Column="1" Command="{Binding SelectedItem.AddKeyword, ElementName=Gallery}" Style="{StaticResource MaterialDesignFlatButton}" Padding="2">
+                                        <materialDesign:PackIcon
+                                            Kind="AddBox"
+                                            Height="15"
+                                            Width="15" />
+                                    </Button>
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Row="1">
+
+                                <ListView ItemsSource="{Binding SelectedItem.Keywords, ElementName=Gallery}"  HorizontalContentAlignment="Stretch">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="Padding" Value="2"/>
+                                            <Setter Property="Margin" Value="2"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock VerticalAlignment="Center" Text="{Binding}"/>
+                                                <Button Grid.Column="1" VerticalAlignment="Center" Command="{Binding SelectedItem.DeleteKeyword, ElementName=Gallery}" CommandParameter="{Binding}" Padding="2">
+                                                    <materialDesign:PackIcon
+                                                            Kind="Trash"
+                                                            Height="15"
+                                                            Width="15" />
+                                                </Button>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Border>
                         </Grid>
                     </UserControl>
                 </Border>

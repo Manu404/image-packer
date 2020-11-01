@@ -10,8 +10,19 @@
                     <helper:InverseBooleanConverter x:Key="InverseBooleanConverter" />
                 </ResourceDictionary>
 
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <ResourceDictionary>
+                    <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                        <Setter Property="Padding" Value="2" />
+                    </Style>
+                </ResourceDictionary>
+                
                 <ResourceDictionary Source="View/MenuView.xaml" />
                 <ResourceDictionary Source="View/GalleryView.xaml" />
+
+
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>         

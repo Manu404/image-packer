@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local1="clr-namespace:ImagePacker.Client.ViewModel">
+                    xmlns:local1="clr-namespace:ImagePacker.Client.ViewModel" 
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
   
 
     <Style x:Key="ImageViewer" TargetType="UserControl">
@@ -13,11 +14,11 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ImageListView" TargetType="ListView">
+    <Style x:Key="ImageListView" TargetType="ListView" BasedOn="{StaticResource MaterialDesignListView}">
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <UserControl>
+                    <materialDesign:Card Padding="2" Margin="2">
                         <Grid Height="150">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -28,8 +29,18 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <Button>before</Button>
-                                <Button Grid.Column="1">after</Button>
+                                <Button>
+                                    <materialDesign:PackIcon
+                                            Kind="PreviousTitle"
+                                            Height="24"
+                                            Width="24" />
+                                </Button>
+                                <Button Grid.Column="1">
+                                    <materialDesign:PackIcon
+                                            Kind="NextTitle"
+                                            Height="24"
+                                            Width="24" />
+                                </Button>
                             </Grid>
                             <Image Grid.Row="1" Source="{Binding PreviewImage}" Stretch="Uniform" />
 
@@ -44,7 +55,7 @@
                                 <Button Command="{Binding LocateMissingImage}">Locate</Button>
                             </Grid>
                         </Grid>
-                    </UserControl>
+                    </materialDesign:Card>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
