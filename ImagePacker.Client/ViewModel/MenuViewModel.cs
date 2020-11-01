@@ -30,7 +30,7 @@ namespace ImagePacker.Client.ViewModel
             PackCommand = new RelayCommand(() => OnPack(), () => _mainViewModel?.IsProjectLoaded == true);
         }
 
-        public void SetMainViewModel(IMainViewModel viewModel)
+        public void InjectMainViewModel(IMainViewModel viewModel)
         {
             _mainViewModel = viewModel;
         }

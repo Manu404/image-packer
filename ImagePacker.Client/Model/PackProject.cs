@@ -37,6 +37,14 @@ namespace ImagePacker.Client.Model
         public async void LoadImages()
         {
             foreach (var file in Files) await file.Load();
+            CleanMarkedForSuppression();
+        }
+
+        private void CleanMarkedForSuppression()
+        {
+            for (int i = 0; i < Files.Count; i++)
+                if (Files[i].MarkedForSuppresion)
+                    Files.RemoveAt(i);
         }
     }
 }

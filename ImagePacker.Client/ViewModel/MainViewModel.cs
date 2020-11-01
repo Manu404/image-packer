@@ -69,7 +69,7 @@ namespace ImagePacker.Client.ViewModel
 
         private void Initialize()
         {
-            MenuViewModel.SetMainViewModel(this);
+            MenuViewModel.InjectMainViewModel(this);
             IsProjectLoaded = false;
             IsBusy = false;
 
@@ -104,7 +104,7 @@ namespace ImagePacker.Client.ViewModel
         {
             if (Project != null) SaveProject();
             _fileDialogProvider.ShowLoadDialog("Load Project", "project files (*.proj)|*.proj", (f) => Project = ProjectSerializer.Load(f));
-            Project?.LoadImages();
+            LoadImages();
         }
 
         public void Exit()
@@ -117,13 +117,14 @@ namespace ImagePacker.Client.ViewModel
             if (Project == null) return;
             _fileDialogProvider.ShowLoadMultipleDialog("Load image files", "image files (*.jpg)|*.jpg", (f) => f.ToList().ForEach(Project.AddFile));
             RaisePropertyChanged("Project");
-            Project.LoadImages();
+            LoadImages();
         }
 
         public async Task LoadFullResImage()
         {
             this.FullResolutionImage = null;
             if (this.SelectedFile == null) return;
+            else if (this.SelectedFile.MissingImage) return;
 
             await Task.Run(() =>
             {
@@ -153,6 +154,18 @@ namespace ImagePacker.Client.ViewModel
 
                 this.IsLoading = false;
             });
+        }
+
+        private void LoadImages()
+        {
+            InjectFileDialogProvider();
+            Project?.LoadImages();
+        }
+
+        private void InjectFileDialogProvider()
+        {
+            if (Project == null) return;
+            Project.Files.ToList().ForEach(f => f.DialogProvider = this._fileDialogProvider);
         }
     }
 }

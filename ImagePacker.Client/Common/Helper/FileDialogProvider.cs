@@ -1,9 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Windows;
 
 namespace ImagePacker.Client.ViewModel
 {
-
     public interface IFileDialogProvider
     {
         void ShowLoadDialog(string title, string filter, Action<string> save);
@@ -15,38 +15,47 @@ namespace ImagePacker.Client.ViewModel
     {
         public void ShowSaveDialog(string title, string filter, Action<string> save)
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog { Filter = filter, Title = title };
-            if (saveFileDialog1.ShowDialog() == true)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                if (saveFileDialog1.FileName != string.Empty)
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog { Filter = filter, Title = title };
+                if (saveFileDialog1.ShowDialog() == true)
                 {
-                    save(saveFileDialog1.FileName);
+                    if (saveFileDialog1.FileName != string.Empty)
+                    {
+                        save(saveFileDialog1.FileName);
+                    }
                 }
-            }
+            });
         }
 
         public void ShowLoadDialog(string title, string filter, Action<string> load)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog { Filter = filter, Title = title };
-            if (openFileDialog1.ShowDialog() == true)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                if (openFileDialog1.FileName != string.Empty)
+                OpenFileDialog openFileDialog1 = new OpenFileDialog { Filter = filter, Title = title };
+                if (openFileDialog1.ShowDialog() == true)
                 {
-                    load(openFileDialog1.FileName);
+                    if (openFileDialog1.FileName != string.Empty)
+                    {
+                        load(openFileDialog1.FileName);
+                    }
                 }
-            }
+            });
         }
 
         public void ShowLoadMultipleDialog(string title, string filter, Action<string[]> load)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog { Filter = filter, Title = title, Multiselect = true };
-            if (openFileDialog1.ShowDialog() == true)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                if (openFileDialog1.FileName != string.Empty ||  openFileDialog1.FileNames?.Length > 0)
+                OpenFileDialog openFileDialog1 = new OpenFileDialog { Filter = filter, Title = title, Multiselect = true };
+                if (openFileDialog1.ShowDialog() == true)
                 {
-                    load(openFileDialog1.FileNames);
+                    if (openFileDialog1.FileName != string.Empty ||  openFileDialog1.FileNames?.Length > 0)
+                    {
+                        load(openFileDialog1.FileNames);
+                    }
                 }
-            }
+            });
         }
     }
 }
