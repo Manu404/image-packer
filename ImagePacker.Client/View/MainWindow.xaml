@@ -62,10 +62,10 @@
                     <Button Grid.Column="8" Command="{Binding Pack}" Content="Pack" />
                 </Grid>
                 
-                <UserControl Style="{StaticResource ImageViewer}" Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=Gallery}" />
+                <UserControl Style="{StaticResource ImageViewer}" Grid.Row="1" />
 
                 <UserControl Grid.Row="2">
-                    <ListView  Style="{StaticResource ImageListView}" ItemsSource="{Binding Project.Files}" x:Name="Gallery" />
+                    <ListView  Style="{StaticResource ImageListView}" ItemsSource="{Binding Project.Files}" x:Name="Gallery" SelectedItem="{Binding SelectedFile, Mode=TwoWay}" />
                 </UserControl>
 
                 <UserControl Grid.Column="1" Grid.Row="1" Visibility="{Binding IsProjectLoaded, Converter={StaticResource BooleanToVisibilityConverter}}">

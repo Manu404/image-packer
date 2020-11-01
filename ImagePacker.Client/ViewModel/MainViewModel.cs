@@ -4,11 +4,14 @@ using GalaSoft.MvvmLight.Messaging;
 using ImagePacker.Client.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ImagePacker.Client.ViewModel
 {
@@ -17,6 +20,7 @@ namespace ImagePacker.Client.ViewModel
         private IFileDialogProvider _fileDialogProvider;
         private PackProject _project;
         private bool projectLoaded;
+        private PackProjectFile _selectedFile;
 
         public IMenuViewModel MenuViewModel { get; }
 
@@ -36,6 +40,21 @@ namespace ImagePacker.Client.ViewModel
         public bool IsProjectLoaded { get; set; }
 
         public bool IsBusy { get; private set; }
+
+        public PackProjectFile SelectedFile
+        { 
+            get => _selectedFile;
+            set 
+            { 
+                _selectedFile = value;
+                new Task(async () =>
+                {
+                    await LoadFullResImage();
+                }).Start();
+            }
+        }
+
+        public ImageSource FullResolutionImage { get; set; }
 
         public MainViewModel(IMenuViewModel menuViewModel, IFileDialogProvider fileDialogProvider)
         {
@@ -95,6 +114,35 @@ namespace ImagePacker.Client.ViewModel
             _fileDialogProvider.ShowLoadMultipleDialog("Load image files", "image files (*.jpg)|*.jpg", (f) => f.ToList().ForEach(Project.AddFile));
             RaisePropertyChanged("Project");
             Project.LoadImages();
+        }
+
+        public async Task LoadFullResImage()
+        {
+            await Task.Run(() =>
+            {
+                using (var fileStream = new FileStream(this.SelectedFile.ImageUrl, FileMode.Open, FileAccess.Read))
+                {
+                    BitmapImage bi = new BitmapImage();
+                    try
+                    {
+                        bi.BeginInit();
+                        bi.CacheOption = BitmapCacheOption.OnLoad;
+                        bi.StreamSource = fileStream;
+                        bi.EndInit();
+                        bi.Freeze();
+                        this.FullResolutionImage = bi;
+                    }
+                    finally
+                    {
+                        bi = null;
+                    }
+                }
+
+                // CLR will use mem if available, the full res images are huge and will quickly addup
+                // we force it to collect unused media in memory. There's no memleak, but it's not because resource
+                // are present and GC "don't care" that we should use them without consideration
+                GC.Collect(); 
+            });
         }
     }
 }
