@@ -86,7 +86,7 @@ namespace ImagePacker.Client.ViewModel
         {
             if (Project != null) SaveProject();
             _fileDialogProvider.ShowLoadDialog("Load Project", "project files (*.proj)|*.proj", (f) => Project = ProjectSerializer.Load(f));
-            Project.LoadImages();
+            Project?.LoadImages();
         }
 
         public void Exit()
