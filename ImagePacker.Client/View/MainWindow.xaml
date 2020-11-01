@@ -57,7 +57,7 @@
                     <TextBlock Grid.Column="4">Revision</TextBlock>
                     <TextBlock Grid.Column="6" Text="{Binding Project.Revision}"/>
 
-                    <Button Grid.Column="7" Command="{Binding IncrementRevision}" Content="Update" />
+                    <Button Grid.Column="7" Command="{Binding Project.IncrementRevision}" Content="Update" />
                 </Grid>
                 
                 <UserControl Style="{StaticResource ImageViewer}" Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=Gallery}" />
