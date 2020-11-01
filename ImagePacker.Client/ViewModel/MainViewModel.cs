@@ -33,15 +33,7 @@ namespace ImagePacker.Client.ViewModel
             }
         }
 
-        public bool IsProjectLoaded 
-        { 
-            get => projectLoaded;                
-            set 
-            { 
-                projectLoaded = value;
-                RaisePropertyChanged();
-            }
-        }
+        public bool IsProjectLoaded { get; set; }
 
         public bool IsBusy { get; private set; }
 

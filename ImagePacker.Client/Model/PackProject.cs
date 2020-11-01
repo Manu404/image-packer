@@ -10,16 +10,13 @@ namespace ImagePacker.Client.Model
 {
     public class PackProject : ViewModelBase
     {
-        private int _revision;
-        private string _name;
-
         [XmlIgnore]
         public ICommand IncrementRevision { get; set; }
         [XmlIgnore]
         public string FileName { get; set; }
 
-        public string Name { get => _name; set { _name = value;  RaisePropertyChanged(); } }
-        public int Revision { get => _revision; set { _revision = value; RaisePropertyChanged(); } }
+        public string Name { get; set; }
+        public int Revision { get; set; }
         public ObservableCollection<PackProjectFile> Files { get; set; }
 
         public PackProject()

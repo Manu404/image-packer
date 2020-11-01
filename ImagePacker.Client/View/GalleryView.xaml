@@ -32,7 +32,7 @@
                                 <Button>before</Button>
                                 <Button Grid.Column="1">after</Button>
                             </Grid>
-                            <Image Grid.Row="1" Source="{Binding Image}" Stretch="Uniform" StretchDirection="DownOnly" />
+                            <Image Grid.Row="1" Source="{Binding PreviewImage}" Stretch="Uniform" StretchDirection="DownOnly" />
                         </Grid>
                     </UserControl>
                 </DataTemplate>
